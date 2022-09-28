@@ -1,6 +1,8 @@
+import React from "react";
 import BikeListingScreen from "../screens/BikeListingScreen";
+import Api from "../services/Api";
 
-const MockGetData = [
+const MockGetData = 
     {
         "company": [
           "ЗАО «СитиБайк»"
@@ -14,31 +16,47 @@ const MockGetData = [
           "longitude": 37.616667
         },
         "name": "Velobike"
-      }
-];
+    };
 
 const MockPosList = [MockGetData];
 
-describe('BikeListScreen',() =>{
-    let component = BikeListingScreen;
-    let fixture = ComponentFixture<BikeListingScreen>
-
-    beforeEach(async () =>{
-        await TestBed.configureTestingModule({
-            declarations:[BikeListingScreen],
-            schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
-            imports:[],
-            providers:[]
+it('Api test case', async function() {
+    global.fetch = jest.fn().mockImplementation(() =>{
+        var p  = new Promise((resolve, reject) => {
+            resolve({
+                json: function(){
+                    return MockPosList;
+                }
+            })
         })
-    }).compileComponents();
-});
+        return p;
+    })
 
-beforeEach(() =>{
-    fixture = TestBed.createComponent(BikeListingScreen);
-    component = fixture.componentInstance;
-});
+    const response = await Api.fecthBikeList();
 
-it('should create', ()=>{
-    expect(component).toBeTruthy();
-});
+    expect(response).toBe(MockPosList)
+})
+
+// describe('BikeListScreen',() =>{
+//     let component = BikeListingScreen;
+//     let fixture = ComponentFixture<BikeListingScreen>
+
+//     beforeEach(async () =>{
+//         await TestBed.configureTestingModule({
+//             declarations:[BikeListingScreen],
+//             schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+//             imports:[],
+//             providers:[]
+//         })
+//     }).compileComponents();
+// });
+
+// beforeEach(() =>{
+//     fixture = TestBed.createComponent(BikeListingScreen);
+//     component = fixture.componentInstance;
+// });
+
+// it('should create', ()=>{
+//     expect(component).toBeTruthy();
+// });
 

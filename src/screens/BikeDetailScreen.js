@@ -13,7 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Styles from '../styles/ProjectStyles';
 
 import ImagesConstant from '../constants/Images';
-import constants from '../constants/constants';
+import Api from '../services/Api';
 
 import {useSelector} from 'react-redux';
 
@@ -66,8 +66,7 @@ const BikeListingScreen =(props) =>{
 
     const callApiWithFetch = ()=>{
         setModalVisible(true);
-        fetch(URL+getData).then((response) => response.json())
-        .then((jsonResponse) => {
+        Api.fetchBikeDetail(getData).then((jsonResponse) => {
             name(jsonResponse.network.name)
             location(jsonResponse.network.location.city+", "+jsonResponse.network.location.country) 
             setSlots(jsonResponse.network.location.city)

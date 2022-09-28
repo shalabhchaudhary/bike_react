@@ -1,11 +1,9 @@
 import React,{useState, useEffect} from 'react';
-import { Icon, ListItem, SearchBar } from "react-native-elements";
-import axios from 'axios';
+// import { Icon, ListItem, SearchBar } from "react-native-elements";
 
 import {
     FlatList,
     Text,
-    Button,
     TextInput,
     Image,
     View,
@@ -18,8 +16,6 @@ import { GET_STATIONS, STORE_NUMBER } from "../constants/constants";
 import { useDispatch } from 'react-redux';
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import PrimaryButton from '../components/PrimaryButton';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import Styles from '../styles/ProjectStyles';
 import ImagesConstant from '../constants/Images';
 
@@ -36,7 +32,26 @@ const BikeListingScreen = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
 
     useEffect(() =>{
-        callApiWithFetch()
+        Api.fecthBikeList().then((jsonResponse) =>{
+            setFetchResponse(jsonResponse.networks)
+            setFilterData(jsonResponse.networks)
+
+            console.log('Response ====>',filterData)
+            console.log('ResponseCompany ====>',companyName)
+
+            //Creating action object 
+            const action ={
+                type: GET_STATIONS,
+                payload: jsonResponse.networks
+            };
+            //Dispatch action in redux
+            dispatch(action);
+            setModalVisible(false);
+        }).catch((error) => {
+            console.log('====>',error)
+            setModalVisible(false);
+        });
+        //callApiWithFetch()
     },[])
 
     const callApiWithFetch = ()=>{
